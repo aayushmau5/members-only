@@ -1,0 +1,25 @@
+extends layout
+
+block content
+    .form-container
+        .title <h1> Signup Page </h1>
+        .form
+            form.signupform(method="POST" action='')
+                .form-control
+                    label(for='firstname') Firstname
+                    input(type='text' id="firstname" name='firstname' required="true")
+                .form-control
+                    label(for='lastname') Lastname
+                    input(type='text' id="lastname" name='lastname' required="true")
+                .form-control
+                    label(for='email') Email
+                    input(type='email' id="email" name='email' required="true")
+                    .emailerror
+                .form-control
+                    label(for='password') Password
+                    input(type='password' id="password" name='password' required="true")
+                .form-control
+                    label(for='confirmPassword') Confirm Password
+                    input(type='password' id="confirmPassword" name='confirmPassword' required="true")
+                    .passworderror
+                button.btn Signup
