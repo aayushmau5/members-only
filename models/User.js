@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-// const bcrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema({
@@ -21,7 +21,7 @@ const UserSchema = new Schema({
   password: {
     type: String,
     required: true,
-    minlength: [6, "Minimum Password Length is 6 Characters"],
+    minlength: 6,
   },
 });
 
@@ -33,10 +33,10 @@ UserSchema.virtual("url").get(function () {
   return "/users/" + this._id;
 });
 
-// UserSchema.pre("save", async function (next) {
-//   const salt = await bcrypt.genSalt();
-//   this.password = await bcrypt.hash(this.password, salt);
-//   next();
-// });
+UserSchema.pre("save", async function (next) {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+  next();
+});
 
 module.exports = mongoose.model("User", UserSchema);

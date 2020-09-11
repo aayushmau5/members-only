@@ -41,6 +41,10 @@ exports.signup_post = [
     });
     user.save(function (err) {
       if (err) {
+        if (err.code === 11000) {
+          console.log("Duplicate Key Error");
+          return next(err);
+        }
         return next(err);
       }
       console.log("Data saved to the DB.");
