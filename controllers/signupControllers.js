@@ -28,9 +28,12 @@ exports.signup_post = [
     console.log("Validation and sanitization done!");
     const error = validator.validationResult(req);
     if (!error.isEmpty()) {
-      console.log("Error Occured");
-      console.log(error);
-      res.render("signup", { data: null, errors: error.array() });
+      console.log(error.array());
+      res.render("signup", {
+        data: null,
+        keyerror: null,
+        errors: error.array(),
+      });
       return;
     }
     const user = new User({
@@ -42,8 +45,12 @@ exports.signup_post = [
     user.save(function (err) {
       if (err) {
         if (err.code === 11000) {
-          console.log("Duplicate Key Error");
-          return next(err);
+          res.render("signup", {
+            data: null,
+            keyerror: "Email Already Registered",
+            errors: null,
+          });
+          return;
         }
         return next(err);
       }

@@ -23,3 +23,7 @@ block content
                     input(type='password' id="confirmPassword" name='confirmPassword' required="true")
                     .passworderror
                 button.btn Signup
+                
+                if errors
+                    each error in errors
+                        

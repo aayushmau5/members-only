@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const signupController = require("../controllers/signupControllers");
 const loginController = require("../controllers/loginControllers");
+const messageController = require("../controllers/messageControllers");
 
 router.get("/", (req, res) => res.render("index"));
 router.get("/signup", signupController.signup_get);
