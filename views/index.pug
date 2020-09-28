@@ -5,16 +5,10 @@ block content
     h1 Welcome to MembersOnly Page
 
     h3 Messages
+    if result
     ul
-      li
-        h3 Title
-        p Paragraph
-        a(href='/login') Login to see who wrote that
-      li
-        h3 Title
-        p Paragraph
-        a(href='/login') Login to see who wrote that
-      li
-        h3 Title
-        p Paragraph
-        a(href='/login') Login to see who wrote that
+      each val in result
+        li
+          h3= val.title
+          p= val.detail
+          a(href='/login') Login to see who wrote that
