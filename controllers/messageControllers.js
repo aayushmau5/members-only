@@ -5,6 +5,6 @@ exports.showMessages = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.render("index", { result: results });
+    res.render("index", { result: results, pageTitle: 'MembersOnly', path: '/' });
   });
 };

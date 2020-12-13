@@ -2,7 +2,7 @@ const validator = require("express-validator");
 const User = require("../models/User");
 
 exports.signup_get = function (req, res, next) {
-  res.render("signup");
+  res.render("signup", { pageTitle: 'Signup', path: '/signup'});
 };
 
 exports.signup_post = [
@@ -33,6 +33,8 @@ exports.signup_post = [
         data: null,
         keyerror: null,
         errors: error.array(),
+        pageTitle: 'MembersOnly',
+        path: '/signup'
       });
       return;
     }

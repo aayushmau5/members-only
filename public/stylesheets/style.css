@@ -34,6 +34,10 @@ header {
   background-color: black;
 }
 
+.active {
+  background-color: rgb(116, 116, 116);
+}
+
 main {
   padding: 30px;
   display: flex;

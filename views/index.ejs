@@ -1,0 +1,21 @@
+<%- include('includes/head.ejs') %>
+
+<main>
+    <div class="index-block">
+        <h1>Welcome to MembersOnly</h1>
+        <h3>Messages</h3>
+        <% if(result) { %>
+            <ul>
+                <% for(let i = 0; i < result.length; i++) {%>
+                    <li>
+                        <h3><%= result[i].title %></h3>
+                        <p><%= result[i].detail %></p>
+                        <a href="/login">Login to see who wrote that</a>
+                    </li>
+                <% } %>
+            </ul>
+        <% } %>
+    </div>
+</main>
+
+<%- include('includes/end.ejs') %>
