@@ -1,42 +1,50 @@
-const validator = require("express-validator");
+const { body, validationResult } = require("express-validator");
 const User = require("../models/User");
 
 exports.signup_get = function (req, res, next) {
-  res.render("signup", { pageTitle: 'Signup', path: '/signup'});
+  res.render("signup", {
+    data: {
+      firstname: "",
+      lastname: "",
+      email: "",
+    },
+    pageTitle: "Signup",
+    path: "/signup",
+    errors: null,
+  });
 };
 
 exports.signup_post = [
-  validator
-    .body("firstname")
+  body("firstname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Firstname must be specified"),
-  validator
-    .body("lastname")
+    .withMessage("Firstname must be specified")
+    .escape(),
+  body("lastname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Lastname must be specified"),
-  validator.body("email").isEmail().withMessage("Please enter a valid email"),
-  validator
-    .body("password")
+    .withMessage("Lastname must be specified")
+    .escape(),
+  body("email").isEmail().withMessage("Please enter a valid email").escape(),
+  body("password")
+    .trim()
     .isLength({ min: 6 })
     .withMessage("Password must be atleast 6 character long"),
-  validator.sanitize("firstname").escape(),
-  validator.sanitize("lastname").escape(),
-  validator.sanitize("email").escape(),
   (req, res, next) => {
     console.log("Validation and sanitization done!");
-    const error = validator.validationResult(req);
+    const error = validationResult(req);
     if (!error.isEmpty()) {
       console.log(error.array());
-      res.render("signup", {
-        data: null,
-        keyerror: null,
+      return res.render("signup", {
+        data: {
+          firstname: req.body.firstname,
+          lastname: req.body.lastname,
+          email: req.body.email,
+        },
         errors: error.array(),
-        pageTitle: 'MembersOnly',
-        path: '/signup'
+        pageTitle: "MembersOnly",
+        path: "/signup",
       });
-      return;
     }
     const user = new User({
       firstname: req.body.firstname,
@@ -47,12 +55,16 @@ exports.signup_post = [
     user.save(function (err) {
       if (err) {
         if (err.code === 11000) {
-          res.render("signup", {
-            data: null,
-            keyerror: "Email Already Registered",
-            errors: null,
+          return res.render("signup", {
+            data: {
+              firstname: req.body.firstname,
+              lastname: req.body.lastname,
+              email: req.body.email,
+            },
+            pageTitle: 'Signup',
+            path: '/signup',
+            errors: [{ msg: "Email Already Registered" }],
           });
-          return;
         }
         return next(err);
       }

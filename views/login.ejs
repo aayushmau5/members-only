@@ -5,10 +5,15 @@
         <div class="title">
             <h1>Login Page</h1>
         </div>
+        <% if(errors){ %>
+            <div class="errors">
+                <%= errors[0].msg %>
+            </div>
+        <% } %>
         <form action="/login" method="POST">
             <div class="form-control">
-               <label for="username">Username</label> 
-               <input type="text" name="username" required>
+               <label for="email">Email</label> 
+               <input type="email" name="email" value="<%= data.email %>" required>
             </div>
             <div class="form-control">
                 <label for="password">Password</label>

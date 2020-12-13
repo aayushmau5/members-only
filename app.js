@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, "public")));
 mongoose.connect(process.env.mongoDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true
 });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "DB Connection Error."));
