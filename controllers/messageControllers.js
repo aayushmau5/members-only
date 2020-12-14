@@ -5,6 +5,11 @@ exports.showMessages = (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.render("index", { result: results, pageTitle: 'MembersOnly', path: '/' });
+    res.render("index", {
+      result: results,
+      pageTitle: "MembersOnly",
+      path: "/",
+      authenticated: req.isAuthenticated(),
+    });
   });
 };

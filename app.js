@@ -1,11 +1,22 @@
 var createError = require("http-errors");
 var express = require("express");
 var path = require("path");
-var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const mongoose = require("mongoose");
+const session = require("express-session");
+const passport = require("passport");
+const flash = require('connect-flash');
 require("dotenv").config();
 const route = require("./routes/route");
+
+// DB Connection
+mongoose.connect(process.env.mongoDB, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useCreateIndex: true,
+});
+const db = mongoose.connection;
+db.on("error", console.error.bind(console, "DB Connection Error."));
 
 var app = express();
 
@@ -14,18 +25,25 @@ app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 
 app.use(logger("dev"));
+app.use(flash());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-mongoose.connect(process.env.mongoDB, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
-});
-const db = mongoose.connection;
-db.on("error", console.error.bind(console, "DB Connection Error."));
+// Setting up the session
+app.use(
+  session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true,
+  })
+);
+
+require('./controllers/passportController');
+
+// Setting up passport js middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/", route);
 
@@ -42,7 +60,7 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error", { pageTitle: "Error", path: '' });
+  res.render("error", { pageTitle: "Error", path: "" });
 });
 
 module.exports = app;

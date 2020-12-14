@@ -11,11 +11,17 @@
       <div class="logo">MembersOnly</div>
       <div class="links">
         <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
-        <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
-          >Login</a
-        >
-        <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
-          >Signup</a
-        >
+        <% if(authenticated) { %>
+          <a href="/logout">Logout</a>
+        <% } else { %>
+          <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
+            >Login</a
+          >
+          <a href="/signup" class="<%= path === '/signup' ? 'active' : '' %>"
+            >Signup</a
+          >
+        <% } %>
       </div>
     </header>
+  </body>
+</html>

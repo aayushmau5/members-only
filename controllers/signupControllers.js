@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
 exports.signup_get = function (req, res, next) {
@@ -11,6 +12,7 @@ exports.signup_get = function (req, res, next) {
     pageTitle: "Signup",
     path: "/signup",
     errors: null,
+    authenticated: req.isAuthenticated(),
   });
 };
 
@@ -44,32 +46,37 @@ exports.signup_post = [
         errors: error.array(),
         pageTitle: "MembersOnly",
         path: "/signup",
+        authenticated: req.isAuthenticated(),
       });
     }
-    const user = new User({
-      firstname: req.body.firstname,
-      lastname: req.body.lastname,
-      email: req.body.email,
-      password: req.body.password,
-    });
-    user.save(function (err) {
-      if (err) {
-        if (err.code === 11000) {
-          return res.render("signup", {
-            data: {
-              firstname: req.body.firstname,
-              lastname: req.body.lastname,
-              email: req.body.email,
-            },
-            pageTitle: 'Signup',
-            path: '/signup',
-            errors: [{ msg: "Email Already Registered" }],
-          });
+    bcrypt.hash(req.body.password, 16, (err, hashedPassword) => {
+      if (err) return next(err);
+      const user = new User({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        email: req.body.email,
+        password: hashedPassword,
+      });
+      user.save(function (err) {
+        if (err) {
+          if (err.code === 11000) {
+            return res.render("signup", {
+              data: {
+                firstname: req.body.firstname,
+                lastname: req.body.lastname,
+                email: req.body.email,
+              },
+              pageTitle: "Signup",
+              path: "/signup",
+              errors: [{ msg: "Email Already Registered" }],
+              authenticated: req.isAuthenticated(),
+            });
+          }
+          return next(err);
         }
-        return next(err);
-      }
-      console.log("Data saved to the DB.");
-      res.redirect("/");
+        console.log("Data saved to the DB.");
+        res.redirect("/");
+      });
     });
   },
 ];
