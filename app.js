@@ -5,7 +5,7 @@ var logger = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
-const flash = require('connect-flash');
+const flash = require("connect-flash");
 require("dotenv").config();
 const route = require("./routes/route");
 
@@ -39,7 +39,7 @@ app.use(
   })
 );
 
-require('./controllers/passportController');
+require("./controllers/passportController");
 
 // Setting up passport js middleware
 app.use(passport.initialize());
@@ -60,7 +60,12 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error", { pageTitle: "Error", path: "" });
+  res.render("error", {
+    pageTitle: "Error",
+    path: "",
+    authenticated: req.isAuthenticated(),
+    isMember: req.user ? req.user.isMember : null
+  });
 });
 
 module.exports = app;

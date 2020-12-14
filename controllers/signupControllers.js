@@ -13,6 +13,7 @@ exports.signup_get = function (req, res, next) {
     path: "/signup",
     errors: null,
     authenticated: req.isAuthenticated(),
+    isMember: null,
   });
 };
 
@@ -47,6 +48,7 @@ exports.signup_post = [
         pageTitle: "MembersOnly",
         path: "/signup",
         authenticated: req.isAuthenticated(),
+        isMember: null,
       });
     }
     bcrypt.hash(req.body.password, 16, (err, hashedPassword) => {
@@ -70,12 +72,13 @@ exports.signup_post = [
               path: "/signup",
               errors: [{ msg: "Email Already Registered" }],
               authenticated: req.isAuthenticated(),
+              isMember: null,
             });
           }
           return next(err);
         }
         console.log("Data saved to the DB.");
-        res.redirect("/");
+        res.redirect("/login");
       });
     });
   },

@@ -22,6 +22,10 @@ const UserSchema = new Schema({
     required: true,
     minlength: 6,
   },
+  member: {
+    type: Boolean,
+    default: false
+  }
 });
 
 UserSchema.virtual("fullname").get(function () {

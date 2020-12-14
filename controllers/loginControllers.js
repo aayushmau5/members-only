@@ -15,7 +15,8 @@ exports.login_get = function (req, res, next) {
     pageTitle: "Login",
     path: "/login",
     errors: error,
-    authenticated : req.isAuthenticated()
+    authenticated: req.isAuthenticated(),
+    isMember: null,
   });
 };
 
@@ -35,7 +36,8 @@ exports.login_post = [
         errors: errors.array(),
         pageTitle: "Login",
         path: "/login",
-        authenticated: req.isAuthenticated()
+        authenticated: req.isAuthenticated(),
+        isMember: null,
       });
     }
     next();

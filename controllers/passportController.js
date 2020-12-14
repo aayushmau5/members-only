@@ -13,12 +13,12 @@ passport.use(
     (username, password, done) => {
       User.findOne({ email: username }, (err, user) => {
         if (err) return done(err);
-        if (!user) return done(null, false, { msg: "Incorrect Email" });
+        if (!user) return done(null, false);
         bcrypt.compare(password, user.password, (err, res) => {
           if (res) {
             return done(null, user);
           } else {
-            return done(null, false, { msg: "Incorrect Password" });
+            return done(null, false);
           }
         });
       });

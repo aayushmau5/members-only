@@ -13,6 +13,11 @@
         <a href="/" class="<%= path === '/' ? 'active' : '' %>">Home</a>
         <% if(authenticated) { %>
           <a href="/logout">Logout</a>
+          <% if(!isMember) { %>
+            <a href="/join" class="<%= path === '/join' ? 'active' : '' %>">Join</a>
+          <% } else { %>
+            <a href="/add-message" class="<%= path === '/add-message' ? 'active' : '' %>">Add Message</a>
+          <% } %>
         <% } else { %>
           <a href="/login" class="<%= path === '/login' ? 'active' : '' %>"
             >Login</a

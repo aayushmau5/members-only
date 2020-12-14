@@ -31,11 +31,10 @@ header {
 
 .links a:hover {
   color: white;
-  background-color: black;
 }
 
-.active {
-  background-color: rgb(116, 116, 116);
+.links .active {
+  color: rgb(255, 255, 255);
 }
 
 main {
@@ -106,4 +105,13 @@ main {
 .errors {
   color: rgb(243, 74, 74);
   font-size: 16px;
+}
+
+.member-message {
+  text-align: center;
+}
+
+textarea {
+  font-family: inherit;
+  font-size: 20px;
 }
