@@ -24,16 +24,12 @@ const UserSchema = new Schema({
   },
   member: {
     type: Boolean,
-    default: false
-  }
-});
-
-UserSchema.virtual("fullname").get(function () {
-  return this.firstname + " " + this.lastname;
-});
-
-UserSchema.virtual("url").get(function () {
-  return "/users/" + this._id;
+    default: false,
+  },
+  admin: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 module.exports = mongoose.model("User", UserSchema);

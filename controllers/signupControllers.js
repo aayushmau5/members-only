@@ -51,6 +51,13 @@ exports.signup_post = [
         isMember: null,
       });
     }
+    let isAdmin = false;
+    if (
+      req.body.admin_passphrase &&
+      req.body.admin_passphrase === "letmeinlmao"
+    ) {
+      isAdmin = true;
+    }
     bcrypt.hash(req.body.password, 16, (err, hashedPassword) => {
       if (err) return next(err);
       const user = new User({
@@ -58,6 +65,7 @@ exports.signup_post = [
         lastname: req.body.lastname,
         email: req.body.email,
         password: hashedPassword,
+        admin: isAdmin,
       });
       user.save(function (err) {
         if (err) {

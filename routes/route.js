@@ -23,5 +23,10 @@ router.post(
   loginController.isLoggedIn,
   messageController.postAddMessage
 );
+router.post(
+  "/delete",
+  loginController.isLoggedIn,
+  messageController.postDeleteMessage
+);
 
 module.exports = router;

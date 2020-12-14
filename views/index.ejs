@@ -19,6 +19,12 @@
                         <% } else { %>
                             <a href="/login">Login to see who wrote that</a>
                         <% } %>
+                        <% if(admin) { %>
+                            <form method="POST" action="/delete">
+                                <input type="hidden" name="delete_id" value="<%= result[i]._id %>">
+                                <button class="delete-btn">Delete</button>
+                            </form>
+                        <% } %>
                     </li>
                 <% } %>
             </ul>
