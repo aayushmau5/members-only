@@ -1,6 +1,7 @@
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+require("dotenv").config();
 
 exports.signup_get = function (req, res, next) {
   res.render("signup", {
@@ -45,18 +46,34 @@ exports.signup_post = [
           email: req.body.email,
         },
         errors: error.array(),
-        pageTitle: "MembersOnly",
+        pageTitle: "Signup",
         path: "/signup",
         authenticated: req.isAuthenticated(),
         isMember: null,
       });
     }
     let isAdmin = false;
-    if (
-      req.body.admin_passphrase &&
-      req.body.admin_passphrase === "letmeinlmao"
-    ) {
-      isAdmin = true;
+    if (req.body.admin_passphrase) {
+      if (req.body.admin_passphrase === process.env.ADMIN) isAdmin = true;
+      else {
+        return res.render("signup", {
+          data: {
+            firstname: req.body.firstname,
+            lastname: req.body.lastname,
+            email: req.body.email,
+          },
+          errors: [
+            {
+              msg:
+                "Wrong Admin Passphrase. If you are not Admin, leave it blank.",
+            },
+          ],
+          pageTitle: "Signup",
+          path: "/signup",
+          authenticated: req.isAuthenticated(),
+          isMember: null,
+        });
+      }
     }
     bcrypt.hash(req.body.password, 16, (err, hashedPassword) => {
       if (err) return next(err);
@@ -85,7 +102,6 @@ exports.signup_post = [
           }
           return next(err);
         }
-        console.log("Data saved to the DB.");
         res.redirect("/login");
       });
     });
