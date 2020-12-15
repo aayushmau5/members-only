@@ -4,6 +4,7 @@ var path = require("path");
 // var logger = require("morgan");
 const mongoose = require("mongoose");
 const session = require("express-session");
+const MongoStore = require("connect-mongo")(session);
 const passport = require("passport");
 const flash = require("connect-flash");
 require("dotenv").config();
@@ -34,8 +35,12 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(
   session({
     secret: process.env.SECRET,
+    store: new MongoStore({ mongooseConnection: db, collection: "sessions" }),
     resave: false,
     saveUninitialized: true,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24, //1day
+    },
   })
 );
 
@@ -64,7 +69,7 @@ app.use(function (err, req, res, next) {
     pageTitle: "Error",
     path: "",
     authenticated: req.isAuthenticated(),
-    isMember: req.user ? req.user.isMember : null
+    isMember: req.user ? req.user.isMember : null,
   });
 });
 
